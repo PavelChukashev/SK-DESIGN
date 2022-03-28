@@ -1,9 +1,9 @@
-import React from 'react';
-import { Form } from './components/Form';
+import React from "react";
+import Form from "./components/Form";
 
 function App() {
   return (
-    <div className='main-container'>
+    <div className="main-container">
       <Form />
     </div>
   );

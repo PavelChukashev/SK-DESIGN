@@ -1,26 +1,42 @@
-import { React, useState } from 'react'
-import cities from '../features/data/cities.json'
-import { Select, MenuItem } from '@mui/material'
+import { React, useMemo } from "react";
+import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
 
-const SelectCity = () => {
-    const [city, setCity] = useState('Выберите город *')
-    console.log(cities)
+const SelectCity = ({ name, title, value, values, onBlur, onChange }) => {
+  const normalizeValues = useMemo(() => {
+    return values.map((value) => {
+      if (typeof value === "object") {
+        return value;
+      } else {
+        return { id: value, name: value };
+      }
+    });
+  }, [values]);
 
-    const handleChange = (event) => {
-        setCity(event.target.value);
-      };
-    
+  const handleChange = (e) => {
+    onChange(name)(e.target.value);
+  };
+
   return (
-        <Select
-            label='Выберите город *'
-            value={city}
-            onChange={handleChange}
-        >
-            {cities.map( (city) => {
-                return <MenuItem value={city.name} key={city.id}>{city.name}</MenuItem>
-            })}
-        </Select>
-  )
-}
+    <FormControl fullWidth>
+      <InputLabel id="select_label">{title}</InputLabel>
+      <Select
+        labelId="select_label"
+        name={name}
+        value={value}
+        label={title}
+        onBlur={onBlur}
+        onChange={handleChange}
+      >
+        {normalizeValues.map(({ id, name }) => {
+          return (
+            <MenuItem value={name} key={id}>
+              {name}
+            </MenuItem>
+          );
+        })}
+      </Select>
+    </FormControl>
+  );
+};
 
-export default SelectCity
+export default SelectCity;
