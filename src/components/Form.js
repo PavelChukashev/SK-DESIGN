@@ -9,7 +9,7 @@ import sources from "../features/data/sources.json";
 import { sendRequest } from "../redux/request";
 import { connect } from "react-redux";
 
-const Form = ({ sendRequest, isRequestSend }) => {
+const Form = ({ sendRequest, isRequestSend, className }) => {
   const [isShow, setShow] = useState(true);
   const showFields = () => {
     setShow(!isShow);
@@ -35,7 +35,7 @@ const Form = ({ sendRequest, isRequestSend }) => {
   });
 
   return (
-    <div>
+    <div className={className}>
       <Formik
         initialValues={{
           name: "",
@@ -47,8 +47,9 @@ const Form = ({ sendRequest, isRequestSend }) => {
         }}
         validateOnBlur
         validationSchema={validationsSchema}
-        onSubmit={(values) => {
+        onSubmit={(values, onSubmitProps) => {
           sendRequest(values);
+          onSubmitProps.resetForm();
         }}
       >
         {({
@@ -62,63 +63,73 @@ const Form = ({ sendRequest, isRequestSend }) => {
           dirty,
         }) => {
           return (
-            <div>
-              <TextField
-                id="outlined-basic"
-                name={"name"}
-                label="Ваше имя *"
-                variant="outlined"
-                placeholder="Иван"
-                error={errors.name}
-                helperText={errors.name}
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="outlined-basic"
-                name="phone"
-                label="Номер телефона *"
-                variant="outlined"
-                error={errors.phone}
-                helperText={errors.phone}
-                placeholder="+7 (000) 000-00-00"
-                value={values.phone}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="outlined-basic"
-                name="mail"
-                label="E-mail *"
-                variant="outlined"
-                placeholder="example@skdesign.ru"
-                value={values.mail}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
-              <TextField
-                id="outlined-basic"
-                name="profile"
-                label="Ссылка на профиль *"
-                variant="outlined"
-                placeholder="instagram.com/skde…"
-                value={values.profile}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-              />
+            <div className="form-container">
+              <div className="form-container-top">
+                <TextField
+                  id="outlined-basic"
+                  name={"name"}
+                  label="Ваше имя *"
+                  variant="outlined"
+                  placeholder="Иван"
+                  error={errors.name}
+                  helperText={errors.name}
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  size="small"
+                  className="form-input"
+                />
+                <TextField
+                  id="outlined-basic"
+                  name="phone"
+                  label="Номер телефона *"
+                  variant="outlined"
+                  error={errors.phone}
+                  helperText={errors.phone}
+                  placeholder="+7 (000) 000-00-00"
+                  value={values.phone}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  size="small"
+                  className="form-input"
+                />
+                <TextField
+                  id="outlined-basic"
+                  name="mail"
+                  label="E-mail *"
+                  variant="outlined"
+                  placeholder="example@skdesign.ru"
+                  value={values.mail}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  size="small"
+                  className="form-input"
+                />
+                <TextField
+                  id="outlined-basic"
+                  name="profile"
+                  label="Ссылка на профиль *"
+                  variant="outlined"
+                  placeholder="instagram.com/skde…"
+                  value={values.profile}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  size="small"
+                  className="form-input"
+                />
+              </div>
               <SelectCity
                 name="city"
                 title="Выберите город *"
@@ -126,6 +137,9 @@ const Form = ({ sendRequest, isRequestSend }) => {
                 values={cities}
                 onChange={handleChange}
                 onBlur={handleBlur}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
               <TextField
                 id="outlined-basic"
@@ -137,8 +151,16 @@ const Form = ({ sendRequest, isRequestSend }) => {
                 InputLabelProps={{
                   shrink: true,
                 }}
+                size="small"
+                fullWidth
+                className="form-input form-input-org"
               />
-              <div onClick={showFields}>{isShow ? "Скрыть" : "Показать"} дополнительные поля</div>
+              <div 
+                onClick={showFields} 
+                className="additional-toggler"
+              >
+                {isShow ? "Скрыть" : "Показать"} дополнительные поля {isShow ? "▲" : "▼"}
+              </div>
               {isShow && (
                 <>
                   <TextField
@@ -147,8 +169,11 @@ const Form = ({ sendRequest, isRequestSend }) => {
                     label="Получатель"
                     variant="outlined"
                     placeholder="ФИО"
+                    fullWidth
+                    size="small"
+                    className="form-input form-input-customer"
                   />
-                  <SelectCity
+                  <SelectSource
                     value={values.sources}
                     name="sources"
                     title="Откуда узнали про нас?"
@@ -164,7 +189,7 @@ const Form = ({ sendRequest, isRequestSend }) => {
                 onClick={handleSubmit}
                 type={"submit"}
               >
-                {!isRequestSend ? "Отправить" : "Загрузка"}
+                {!isRequestSend ? "Отправить заявку" : "Загрузка"}
               </Button>
             </div>
           );

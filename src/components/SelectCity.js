@@ -17,7 +17,7 @@ const SelectCity = ({ name, title, value, values, onBlur, onChange }) => {
   };
 
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth size="small" className={"form-input"}>
       <InputLabel id="select_label">{title}</InputLabel>
       <Select
         labelId="select_label"
@@ -26,6 +26,7 @@ const SelectCity = ({ name, title, value, values, onBlur, onChange }) => {
         label={title}
         onBlur={onBlur}
         onChange={handleChange}
+
       >
         {normalizeValues.map(({ id, name }) => {
           return (
